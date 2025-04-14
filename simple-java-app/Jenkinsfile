@@ -5,7 +5,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo '🔨 Building...'
-                sh 'mvn compile'
+                bat 'mvn compile'
             }
         }
 
@@ -18,14 +18,14 @@ pipeline {
         stage('Package') {
             steps {
                 echo '📦 Packaging...'
-                sh 'mvn package'
+                bat 'mvn package'
             }
         }
 
         stage('Deploy') {
             steps {
                 echo '🚀 Deploying...'
-                sh 'java -cp target/hello-1.0.jar Hello'
+                bat 'java -cp target/hello-1.0.jar Hello'
             }
         }
     }
