@@ -32,7 +32,7 @@ pipeline {
             steps {
                 dir('simple-java-app') {
                     echo '🚀 Deploying...'
-                    bat 'java -cp target/hello-1.0.jar Hello'
+                    bat 'java -cp target/hello-1.0.jar com.example.Hello'
                 }
             }
         }
