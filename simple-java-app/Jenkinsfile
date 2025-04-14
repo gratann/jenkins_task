@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                echo '🔨 Building...'
+                sh 'mvn compile'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo '🧪 No tests yet...'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                echo '📦 Packaging...'
+                sh 'mvn package'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo '🚀 Deploying...'
+                sh 'java -cp target/hello-1.0.jar Hello'
+            }
+        }
+    }
+}
