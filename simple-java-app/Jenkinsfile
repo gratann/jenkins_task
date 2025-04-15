@@ -1,20 +1,27 @@
 pipeline {
     agent any
 
+    parameters {
+        string(name: 'BRANCH', defaultValue: 'main', description: 'Git branch to build')
+        string(name: 'BUILD_VERSION', defaultValue: '1.0.0', description: 'Version for the build')
+    }
+
+    environment {
+        JAR_NAME = "hello-${params.BUILD_VERSION}.jar"
+    }
+
     stages {
-        stage('Build') {
+        stage('Checkout') {
             steps {
-                dir('simple-java-app') {
-                    echo '🔨 Building...'
-                    bat 'mvn compile'
-                }
+                git branch: "${params.BRANCH}", url: 'https://github.com/gratann/jenkins_task.git'
             }
         }
 
-        stage('Test') {
+        stage('Build') {
             steps {
                 dir('simple-java-app') {
-                    echo '🧪 No tests yet...'
+                    echo "🔨 Building version ${params.BUILD_VERSION}..."
+                    bat 'mvn compile'
                 }
             }
         }
@@ -22,8 +29,9 @@ pipeline {
         stage('Package') {
             steps {
                 dir('simple-java-app') {
-                    echo '📦 Packaging...'
-                    bat 'mvn package'
+                    echo "📦 Packaging as ${env.JAR_NAME}..."
+                    bat "mvn package"
+                    bat "ren target\\hello-1.0.jar ${env.JAR_NAME}"
                 }
             }
         }
@@ -31,8 +39,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 dir('simple-java-app') {
-                    echo '🚀 Deploying...'
-                    bat 'java -cp target/hello-1.0.jar Hello'
+                    echo "🚀 Deploying ${env.JAR_NAME}..."
+                    bat "java -cp target\\${env.JAR_NAME} Hello"
                 }
             }
         }
